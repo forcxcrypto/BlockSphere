@@ -1,0 +1,43 @@
+# scripts/main.py
+
+from web3 import Web3
+from scripts.blockchain_interaction import connect_to_blockchain, get_block_data, get_transaction_data
+from scripts.data_analysis import analyze_block, analyze_transaction
+from scripts.asset_management import get_token_balance, transfer_tokens
+from scripts.visualization import plot_block_data, plot_transaction_value
+
+def main():
+    # Setup
+    provider_url = 'https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID'
+    web3 = connect_to_blockchain(provider_url)
+    
+    # Query Block Data
+    block_number = 12345678
+    block_data = get_block_data(web3, block_number)
+    block_df = analyze_block(block_data)
+    print(block_df)
+    plot_block_data(block_df)
+    
+    # Query Transaction Data
+    tx_hash = '0x123...'
+    tx_data = get_transaction_data(web3, tx_hash)
+    tx_df = analyze_transaction(tx_data)
+    print(tx_df)
+    plot_transaction_value(tx_df)
+    
+    # Token Management
+    token_address = '0xYourTokenAddress'
+    token_abi = [...]  # Replace with actual ABI
+    account_address = '0xYourAccountAddress'
+    balance = get_token_balance(web3, token_address, account_address, token_abi)
+    print(f"Token balance: {balance} TOK")
+    
+    # Transfer Tokens
+    private_key = '0xYourPrivateKey'
+    to_address = '0xRecipientAddress'
+    amount = 10.0  # Amount to transfer
+    tx_hash = transfer_tokens(web3, token_address, to_address, amount, private_key, token_abi)
+    print(f"Token transfer transaction hash: {tx_hash.hex()}")
+
+if __name__ == "__main__":
+    main()
